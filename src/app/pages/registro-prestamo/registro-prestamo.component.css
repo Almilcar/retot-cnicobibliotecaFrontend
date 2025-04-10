@@ -1,0 +1,53 @@
+
+.mat-form-field {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.mat-form-field.mat-focused .mat-select-trigger {
+  background-color: white !important;  
+}
+
+.mat-card {
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.mat-raised-button {
+  padding: 12px 20px;
+  font-size: 16px;
+  margin-top: 16px;
+  min-width: 160px;
+}
+
+.libro-card {
+  margin-top: 16px;
+}
+
+p {
+  font-size: 14px;
+  color: #888;
+  text-align: center;
+}
+
+.action-button {
+  width: 100%;
+  max-width: 300px;
+  margin-top: 16px;
+}
+
+
+.row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.mat-input-element {
+  height: 40px !important;
+}

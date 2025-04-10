@@ -1,0 +1,101 @@
+<mat-card class="mat-elevation-z4" style="max-width: 800px; margin: 20px auto; padding: 24px;">
+    <h2 class="mat-headline text-center mb-3" style="color: #3f51b5;">
+      {{ isEditing ? '✏️ Editar Usuario' : '👤 Crear Nuevo Usuario' }}
+    </h2>
+    
+    <mat-divider style="margin-bottom: 24px;"></mat-divider>
+  
+    <form (ngSubmit)="onSubmit()" #usuarioForm="ngForm">
+      <div class="form-container" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">
+        <!-- Columna Izquierda -->
+        <div>
+          <!-- Usuario -->
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Nombre de Usuario *</mat-label>
+            <input matInput [(ngModel)]="usuario.Usuario" name="usuario" required>
+          </mat-form-field>
+  
+          <!-- Contraseña -->
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Contraseña *</mat-label>
+            <input matInput type="password" [(ngModel)]="usuario.ContraseniaHash" name="password" required>
+          </mat-form-field>
+        </div>
+  
+        <!-- Columna Derecha -->
+        <div>
+          <!-- Rol -->
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Rol *</mat-label>
+            <mat-select [(ngModel)]="usuario.Rol" name="rol" required>
+              <mat-option value="Administrador">Administrador</mat-option>
+              <mat-option value="Bibliotecario">Bibliotecario</mat-option>
+              <mat-option value="Usuario">Usuario</mat-option>
+            </mat-select>
+          </mat-form-field>
+  
+          <!-- Estado -->
+          <div style="margin-top: 16px;">
+            <mat-label style="display: block; margin-bottom: 8px; color: rgba(0,0,0,.6);">Estado</mat-label>
+            <mat-button-toggle-group [(ngModel)]="usuario.Activo" name="activo">
+              <mat-button-toggle [value]="true">Activo</mat-button-toggle>
+              <mat-button-toggle [value]="false">Inactivo</mat-button-toggle>
+            </mat-button-toggle-group>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Botón de Acción -->
+      <div class="text-center" style="margin-top: 24px;">
+        <button mat-raised-button color="primary" type="submit" [disabled]="usuarioForm.invalid" style="padding: 0 24px;">
+          {{ isEditing ? 'Actualizar Usuario' : 'Crear Usuario' }}
+        </button>
+      </div>
+    </form>
+  
+    <mat-divider style="margin: 24px 0;"></mat-divider>
+  
+    <!-- Listado de Usuarios -->
+    <h3 class="mat-subheading-2" style="margin-bottom: 16px;">📋 Listado de Usuarios</h3>
+    
+    <table mat-table [dataSource]="usuarios" class="mat-elevation-z8" style="width: 100%;">
+      <!-- Usuario Column -->
+      <ng-container matColumnDef="usuario">
+        <th mat-header-cell *matHeaderCellDef> Usuario </th>
+        <td mat-cell *matCellDef="let usuario"> {{ usuario.usuario }} </td>
+      </ng-container>
+    
+      <!-- Rol Column -->
+      <ng-container matColumnDef="rol">
+        <th mat-header-cell *matHeaderCellDef> Rol </th>
+        <td mat-cell *matCellDef="let usuario"> {{ usuario.rol }} </td>
+      </ng-container>
+    
+      <!-- Estado Column -->
+      <ng-container matColumnDef="estado">
+        <th mat-header-cell *matHeaderCellDef> Estado </th>
+        <td mat-cell *matCellDef="let usuario">
+          <span [style.color]="usuario.activo ? 'green' : 'red'">
+            {{ usuario.activo ? 'Activo' : 'Inactivo' }}
+          </span>
+        </td>
+      </ng-container>
+    
+      <!-- Acciones Column -->
+      <ng-container matColumnDef="acciones">
+        <th mat-header-cell *matHeaderCellDef> Acciones </th>
+        <td mat-cell *matCellDef="let usuario">
+          <button mat-icon-button color="primary" (click)="editUsuario(usuario)" matTooltip="Editar">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="deleteUsuario(usuario.idUsuario)" matTooltip="Eliminar">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+    
+      <tr mat-header-row *matHeaderRowDef="['usuario', 'rol', 'estado', 'acciones']"></tr>
+      <tr mat-row *matRowDef="let row; columns: ['usuario', 'rol', 'estado', 'acciones'];"></tr>
+    </table>
+    
+  </mat-card>

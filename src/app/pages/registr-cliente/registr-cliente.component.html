@@ -1,0 +1,96 @@
+<mat-card class="mat-elevation-z4" style="max-width: 800px; margin: 20px auto; padding: 24px;">
+  <h2 class="mat-headline text-center mb-3" style="color: #3f51b5;">👤 Registro de Cliente</h2>
+  
+  <mat-divider style="margin-bottom: 24px;"></mat-divider>
+
+  <form (ngSubmit)="onSubmit()" #clientForm="ngForm">
+    <div class="form-container" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">
+      <!-- Columna Izquierda -->
+      <div>
+        <!-- Nombres -->
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Nombres *</mat-label>
+          <input matInput [(ngModel)]="client.NombreCompleto" name="Nombre completo" required>
+        </mat-form-field>
+        <!-- Tipo Documento -->
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Tipo de Documento *</mat-label>
+          <mat-select [(ngModel)]="client.TipoDocumento" name="tipoDocumento" required>
+            <mat-option value="DNI">DNI</mat-option>
+            <mat-option value="RUC">RUC</mat-option>
+            <mat-option value="CE">Carnet Extranjería</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- Número Documento -->
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Número de Documento *</mat-label>
+          <input matInput [(ngModel)]="client.Documento" name="Documento" required>
+        </mat-form-field>
+      </div>
+
+      <!-- Columna Derecha -->
+      <div>
+        <!-- Email -->
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Correo electrónico *</mat-label>
+          <input matInput type="email" [(ngModel)]="client.Email" name="email" required>
+        </mat-form-field>
+
+        <!-- Teléfono -->
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Teléfono *</mat-label>
+          <input matInput type="tel" [(ngModel)]="client.Telefono" name="telefono" required>
+        </mat-form-field>
+
+        <!-- Dirección -->
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Dirección *</mat-label>
+          <textarea matInput [(ngModel)]="client.Direccion" name="direccion" rows="2" required></textarea>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <!-- Ubicación - Full Width -->
+    <div style="margin-top: 16px;">
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+        <!-- Departamento -->
+        <mat-form-field appearance="fill">
+          <mat-label>Departamento *</mat-label>
+          <mat-select [(ngModel)]="client.Departamento" name="departamento" 
+                      (selectionChange)="onDepartamentoChange()" required>
+            <mat-option *ngFor="let dep of departamentos" [value]="dep">{{ dep }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- Provincia -->
+        <mat-form-field appearance="fill">
+          <mat-label>Provincia *</mat-label>
+          <mat-select [(ngModel)]="client.Provincia" name="provincia" 
+                      (selectionChange)="onProvinciaChange()"
+                      [disabled]="!client.Departamento" required>
+            <mat-option *ngFor="let prov of provincias" [value]="prov">{{ prov }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- Distrito -->
+        <mat-form-field appearance="fill">
+          <mat-label>Distrito *</mat-label>
+          <mat-select [(ngModel)]="client.Distrito" name="distrito" 
+                      [disabled]="!client.Provincia" required>
+            <mat-option *ngFor="let dis of distritos" [value]="dis">{{ dis }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <!-- Botón de Registro -->
+    <div class="text-center" style="margin-top: 24px;">
+      <button mat-raised-button color="primary" type="submit" [disabled]="clientForm.invalid" style="padding: 0 24px;">
+        Registrar Cliente
+      </button>
+    </div>
+  </form>
+
+   
+</mat-card>

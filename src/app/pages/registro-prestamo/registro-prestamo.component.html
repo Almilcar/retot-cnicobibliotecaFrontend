@@ -1,0 +1,63 @@
+<mat-card class="mat-elevation-z4" style="max-width: 600px; margin: 0 auto; padding: 24px;">
+  <h2 class="mat-headline text-center mb-4">📚 Registro de Préstamo</h2>
+
+  <form (ngSubmit)="registrar()" #form="ngForm">
+    <div class="form-container">
+      <!-- Cliente ID -->
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>ID del Cliente</mat-label>
+        <input matInput type="number" [(ngModel)]="prestamo.idCliente" name="idCliente" required>
+      </mat-form-field>
+
+      <!-- Medio de Entrega -->
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Medio de Entrega</mat-label>
+        <mat-select [(ngModel)]="prestamo.medioEntrega" name="medioEntrega" required>
+          <mat-option value="delivery">Delivery</mat-option>
+          <mat-option value="retirar">Retiro en biblioteca</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Libros -->
+      <div *ngFor="let libro of prestamo.libros; let i = index" class="libro-section">
+        <mat-card class="mat-elevation-z2 libro-card" style="margin-top: 16px; padding: 16px;">
+          <h4 class="mat-subheading-1">📘 Libro {{ i + 1 }}</h4>
+
+          <div class="row" style="display: flex; gap: 16px; flex-wrap: wrap;">
+            <!-- ID Copia -->
+            <mat-form-field appearance="fill" class="full-width" style="flex: 1;">
+              <mat-label>ID Copia</mat-label>
+              <input matInput type="number" [(ngModel)]="libro.idCopia" [name]="'idCopia' + i" required>
+            </mat-form-field>
+
+            <!-- Fecha de Entrega -->
+            <mat-form-field appearance="fill" class="full-width" style="flex: 1;">
+              <mat-label>Fecha de Entrega</mat-label>
+              <input matInput [matDatepicker]="picker" [(ngModel)]="libro.fechaEntrega" [name]="'fechaEntrega' + i" required>
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            </mat-form-field>
+          </div>
+        </mat-card>
+      </div>
+
+      <mat-datepicker #picker></mat-datepicker> 
+
+      <!-- Botón Agregar Libro -->
+      <div class="text-center" style="margin-top: 24px;">
+        <button mat-raised-button color="primary" type="button" (click)="agregarLibro()" [disabled]="prestamo.libros.length >= 3" class="action-button">
+          ➕ Agregar Libro
+        </button>
+      </div>
+
+      <!-- Botón Registrar Préstamo -->
+      <div class="text-center" style="margin-top: 16px;">
+        <button mat-raised-button color="accent" type="submit" class="action-button">
+          ✅ Registrar Préstamo
+        </button>
+      </div>
+
+    </div>
+  </form>
+
+  <p *ngIf="mensaje" class="mat-body-2" style="margin-top: 16px; text-align: center; color: #666;">{{ mensaje }}</p>
+</mat-card>
