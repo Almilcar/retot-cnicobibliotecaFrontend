@@ -2,8 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { ClientService } from '../../services/ClientService.service';
 import { UbigeoService } from '../../services/ubigeo.service';
 import { ToastrService } from 'ngx-toastr';
-import { Cliente } from '../Models/Cliente.model';
+ 
 import Swal from 'sweetalert2';
+import { cliente } from '../Models/clienteModels';
+ 
 @Component({
   selector: 'app-registr-cliente',
   standalone: false,
@@ -11,7 +13,7 @@ import Swal from 'sweetalert2';
   styleUrl: './registr-cliente.component.css'
 })
 export class RegistrClienteComponent implements OnInit {
-  client: Cliente = {
+  client: cliente = {
     IdCliente: 0,
     TipoDocumento: '',
     NombreCompleto: '',
@@ -27,12 +29,12 @@ export class RegistrClienteComponent implements OnInit {
   };
 
   editingClient = false;
-  clients: Cliente[] = []; 
+  clients: cliente[] = []; 
   
   departamentos: string[] = [];
   provincias: string[] = [];
   distritos: string[] = [];
-  displayedColumns: string[] = ['nombres', 'apellidos', 'tipoDocumento', 'numeroDocumento', 'email', 'telefono'];
+  displayedColumns: string[] = ['nombreCompleto', 'documento', 'email', 'telefono'];
 
 
   constructor(
@@ -48,11 +50,13 @@ export class RegistrClienteComponent implements OnInit {
 
   loadClients(): void {
     this.clientService.getAllClients().subscribe({
-      next: (data: Cliente[]) => this.clients = data,  
-      error: () => this.toastr.error('Error al cargar clientes')
+      next: (data: cliente[]) => {
+        this.clients = data;
+      },
+      error: () => Swal.fire('Error', 'Error al cargar clientes')
     });
   }
-
+  
   loadDepartamentos(): void {
     this.departamentos = this.ubigeoService.getDepartamentos();
   }
@@ -97,7 +101,7 @@ export class RegistrClienteComponent implements OnInit {
       });
     }
   }
-  
+ 
 
   editClient(client: any): void {
     this.client = { ...client };

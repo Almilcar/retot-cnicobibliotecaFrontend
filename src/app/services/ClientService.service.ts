@@ -1,25 +1,27 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Cliente } from '../pages/Models/Cliente.model';
+import { cliente } from '../pages/Models/clienteModels';
+
 
 @Injectable({
   providedIn: 'root'
 })
+
 export class ClientService {
   private apiUrl = 'http://localhost:5246/api/cliente';  
 
   constructor(private http: HttpClient) {}
 
-  getAllClients(): Observable<Cliente[]> {
-    return this.http.get<Cliente[]>(this.apiUrl);
+  getAllClients(): Observable<cliente[]> {
+    return this.http.get<cliente[]>(this.apiUrl);
   }
 
-  createClient(cliente: Cliente): Observable<void> {
+  createClient(cliente: cliente): Observable<void> {
     return this.http.post<void>(this.apiUrl, cliente);
   }
 
-  updateClient(cliente: Cliente): Observable<void> {
+  updateClient(cliente: cliente): Observable<void> {
     return this.http.put<void>(`${this.apiUrl}/${cliente.IdCliente}`, cliente);
   }
 

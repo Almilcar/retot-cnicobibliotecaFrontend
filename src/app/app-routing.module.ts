@@ -8,6 +8,7 @@ import { MenuComponent } from './pages/menu/menu.component';
 const routes: Routes = [
    
 
+  { path: '', component: RegistroPrestamoComponent },
   { path: 'prestamos', component: RegistroPrestamoComponent },
   { 
     path: 'clientes',
