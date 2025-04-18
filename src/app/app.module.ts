@@ -27,8 +27,6 @@ import { MenuComponent } from './pages/menu/menu.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
  
-
-
 @NgModule({
   declarations: [
     AppComponent,

@@ -10,12 +10,12 @@
         <!-- Nombres -->
         <mat-form-field appearance="fill" class="full-width">
           <mat-label>Nombres *</mat-label>
-          <input matInput [(ngModel)]="client.NombreCompleto" name="Nombre completo" required>
+          <input matInput [(ngModel)]="client.nombreCompleto" name="Nombre completo" required>
         </mat-form-field>
         <!-- Tipo Documento -->
         <mat-form-field appearance="fill" class="full-width">
           <mat-label>Tipo de Documento *</mat-label>
-          <mat-select [(ngModel)]="client.TipoDocumento" name="tipoDocumento" required>
+          <mat-select [(ngModel)]="client.tipoDocumento" name="tipoDocumento" required>
             <mat-option value="DNI">DNI</mat-option>
             <mat-option value="RUC">RUC</mat-option>
             <mat-option value="CE">Carnet Extranjería</mat-option>
@@ -25,7 +25,7 @@
         <!-- Número Documento -->
         <mat-form-field appearance="fill" class="full-width">
           <mat-label>Número de Documento *</mat-label>
-          <input matInput [(ngModel)]="client.Documento" name="Documento" required>
+          <input matInput [(ngModel)]="client.documento" name="Documento" required>
         </mat-form-field>
       </div>
 
@@ -34,19 +34,19 @@
         <!-- Email -->
         <mat-form-field appearance="fill" class="full-width">
           <mat-label>Correo electrónico *</mat-label>
-          <input matInput type="email" [(ngModel)]="client.Email" name="email" required>
+          <input matInput type="email" [(ngModel)]="client.email" name="email" required>
         </mat-form-field>
 
         <!-- Teléfono -->
         <mat-form-field appearance="fill" class="full-width">
           <mat-label>Teléfono *</mat-label>
-          <input matInput type="tel" [(ngModel)]="client.Telefono" name="telefono" required>
+          <input matInput type="tel" [(ngModel)]="client.telefono" name="telefono" required>
         </mat-form-field>
 
         <!-- Dirección -->
         <mat-form-field appearance="fill" class="full-width">
           <mat-label>Dirección *</mat-label>
-          <textarea matInput [(ngModel)]="client.Direccion" name="direccion" rows="2" required></textarea>
+          <textarea matInput [(ngModel)]="client.direccion" name="direccion" rows="2" required></textarea>
         </mat-form-field>
       </div>
     </div>
@@ -57,7 +57,7 @@
         <!-- Departamento -->
         <mat-form-field appearance="fill">
           <mat-label>Departamento *</mat-label>
-          <mat-select [(ngModel)]="client.Departamento" name="departamento" 
+          <mat-select [(ngModel)]="client.departamento" name="departamento" 
                       (selectionChange)="onDepartamentoChange()" required>
             <mat-option *ngFor="let dep of departamentos" [value]="dep">{{ dep }}</mat-option>
           </mat-select>
@@ -66,9 +66,9 @@
         <!-- Provincia -->
         <mat-form-field appearance="fill">
           <mat-label>Provincia *</mat-label>
-          <mat-select [(ngModel)]="client.Provincia" name="provincia" 
+          <mat-select [(ngModel)]="client.provincia" name="provincia" 
                       (selectionChange)="onProvinciaChange()"
-                      [disabled]="!client.Departamento" required>
+                      [disabled]="!client.departamento" required>
             <mat-option *ngFor="let prov of provincias" [value]="prov">{{ prov }}</mat-option>
           </mat-select>
         </mat-form-field>
@@ -76,8 +76,8 @@
         <!-- Distrito -->
         <mat-form-field appearance="fill">
           <mat-label>Distrito *</mat-label>
-          <mat-select [(ngModel)]="client.Distrito" name="distrito" 
-                      [disabled]="!client.Provincia" required>
+          <mat-select [(ngModel)]="client.distrito" name="distrito" 
+                      [disabled]="!client.provincia" required>
             <mat-option *ngFor="let dis of distritos" [value]="dis">{{ dis }}</mat-option>
           </mat-select>
         </mat-form-field>
@@ -87,9 +87,11 @@
     <!-- Botón de Registro -->
     <div class="text-center" style="margin-top: 24px;">
       <button mat-raised-button color="primary" type="submit" [disabled]="clientForm.invalid" style="padding: 0 24px;">
-        Registrar Cliente
+        {{ editingClient ? 'Actualizar Cliente' : 'Registrar Cliente' }}
       </button>
+      <button *ngIf="editingClient" mat-button type="button" (click)="cancelEdit()">Cancelar</button>
     </div>
+    
   </form>
 
   <mat-divider style="margin: 32px 0;"></mat-divider>
@@ -123,6 +125,21 @@
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+ <!-- Columna de Acciones -->
+<ng-container matColumnDef="acciones">
+  <th mat-header-cell *matHeaderCellDef> Acciones </th>
+  <td mat-cell *matCellDef="let cliente">
+    <button mat-icon-button color="primary" (click)="editClient(cliente)">
+      <mat-icon>edit</mat-icon>
+    </button>
+    <button mat-icon-button color="warn" (click)="deleteClient(cliente.idCliente)">
+      <mat-icon>delete</mat-icon>
+    </button>
+  </td>
+</ng-container>
+
+
   </table>
   
 </mat-card>

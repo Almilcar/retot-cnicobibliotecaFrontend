@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UsuarioService } from '../../services/usuario.service';
 import { Usuario } from '../Models/usuario.model';
+import Swal from 'sweetalert2';
 
  
 @Component({
@@ -11,7 +12,7 @@ import { Usuario } from '../Models/usuario.model';
 })
 export class RegistoUsuarioComponent implements OnInit {
   usuarios: Usuario[] = [];
-  usuario: Usuario = { IdUsuario: 0, Usuario: '', ContraseniaHash: '', Rol: '', Activo: true };
+  usuario: Usuario = { idUsuario: 0, usuario: '', contraseniaHash: '', rol: '', activo: true };
   isEditing = false;
   displayedColumns: string[] = ['usuario', 'rol', 'activo', 'acciones'];
 
@@ -22,16 +23,20 @@ export class RegistoUsuarioComponent implements OnInit {
   }
 
   loadUsuarios() {
-    this.usuarioService.getUsuarios().subscribe(data => {
-      if (Array.isArray(data)) {
-        this.usuarios = data;
-        console.log("Usuarios: ", this.usuarios);
-      } else {
-        console.error('Los datos no son un array:', data);
+    this.usuarioService.getUsuarios().subscribe({
+      next: (data) => {
+        if (Array.isArray(data)) {
+          this.usuarios = data;
+        } else {
+          Swal.fire('Error', 'Respuesta inesperada del servidor', 'error');
+        }
+      },
+      error: (err) => {
+        Swal.fire('Error', 'Error al cargar clientes', 'error');
       }
     });
   }
-
+  
   onSubmit() {
     if (this.isEditing) {
       this.usuarioService.updateUsuario(this.usuario).subscribe(() => {
@@ -47,8 +52,10 @@ export class RegistoUsuarioComponent implements OnInit {
   }
 
   editUsuario(usuario: Usuario) {
-    this.usuario = { ...usuario };
+    console.log('Editando usuario:', usuario); 
+    this.usuario = JSON.parse(JSON.stringify(usuario));
     this.isEditing = true;
+    console.log('¿isEditing?', this.isEditing);
   }
 
   deleteUsuario(id: number) {
@@ -58,7 +65,7 @@ export class RegistoUsuarioComponent implements OnInit {
   }
 
   resetForm() {
-    this.usuario = { IdUsuario: 0, Usuario: '', ContraseniaHash: '', Rol: '', Activo: true };
+    this.usuario = { idUsuario: 0, usuario: '', contraseniaHash: '', rol: '', activo: true };
     this.isEditing = false;
   }
 }

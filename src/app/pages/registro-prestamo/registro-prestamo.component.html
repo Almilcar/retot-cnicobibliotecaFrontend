@@ -60,4 +60,39 @@
   </form>
 
   <p *ngIf="mensaje" class="mat-body-2" style="margin-top: 16px; text-align: center; color: #666;">{{ mensaje }}</p>
+
+  <mat-card class="mat-elevation-z4" style="max-width: 800px; margin: 0 auto; padding: 24px;">
+    <h2 class="mat-headline text-center mb-4">📚 Lista de Préstamos</h2>
+  
+    <mat-table [dataSource]="prestamos">
+      <!-- Cliente -->
+      <ng-container matColumnDef="cliente">
+        <mat-header-cell *matHeaderCellDef> Cliente </mat-header-cell>
+        <mat-cell *matCellDef="let prestamo"> {{ prestamo.idCliente }} </mat-cell>
+      </ng-container>
+  
+      <!-- Medio de Entrega -->
+      <ng-container matColumnDef="medioEntrega">
+        <mat-header-cell *matHeaderCellDef> Medio de Entrega </mat-header-cell>
+        <mat-cell *matCellDef="let prestamo"> {{ prestamo.medioEntrega }} </mat-cell>
+      </ng-container>
+  
+      <!-- Libros -->
+      <ng-container matColumnDef="libros">
+        <mat-header-cell *matHeaderCellDef> Libros </mat-header-cell>
+        <mat-cell *matCellDef="let prestamo">
+          <ul>
+            <li *ngFor="let libro of prestamo.libros">
+              Copia ID: {{ libro.idCopia }} | Fecha Entrega: {{ libro.fechaEntrega }}
+            </li>
+          </ul>
+        </mat-cell>
+      </ng-container>
+  
+      <mat-header-row *matHeaderRowDef="['cliente', 'medioEntrega', 'libros']"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: ['cliente', 'medioEntrega', 'libros'];"></mat-row>
+    </mat-table>
+  </mat-card>
+  
+  
 </mat-card>

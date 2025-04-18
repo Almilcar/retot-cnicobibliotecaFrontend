@@ -12,13 +12,13 @@
           <!-- Usuario -->
           <mat-form-field appearance="fill" class="full-width">
             <mat-label>Nombre de Usuario *</mat-label>
-            <input matInput [(ngModel)]="usuario.Usuario" name="usuario" required>
+            <input matInput [(ngModel)]="usuario.usuario" name="usuario" required>
           </mat-form-field>
   
           <!-- Contraseña -->
           <mat-form-field appearance="fill" class="full-width">
             <mat-label>Contraseña *</mat-label>
-            <input matInput type="password" [(ngModel)]="usuario.ContraseniaHash" name="password" required>
+            <input matInput type="password" [(ngModel)]="usuario.contraseniaHash" name="password" required>
           </mat-form-field>
         </div>
   
@@ -27,7 +27,7 @@
           <!-- Rol -->
           <mat-form-field appearance="fill" class="full-width">
             <mat-label>Rol *</mat-label>
-            <mat-select [(ngModel)]="usuario.Rol" name="rol" required>
+            <mat-select [(ngModel)]="usuario.rol" name="rol" required>
               <mat-option value="Administrador">Administrador</mat-option>
               <mat-option value="Bibliotecario">Bibliotecario</mat-option>
               <mat-option value="Usuario">Usuario</mat-option>
@@ -37,7 +37,7 @@
           <!-- Estado -->
           <div style="margin-top: 16px;">
             <mat-label style="display: block; margin-bottom: 8px; color: rgba(0,0,0,.6);">Estado</mat-label>
-            <mat-button-toggle-group [(ngModel)]="usuario.Activo" name="activo">
+            <mat-button-toggle-group [(ngModel)]="usuario.activo" name="activo">
               <mat-button-toggle [value]="true">Activo</mat-button-toggle>
               <mat-button-toggle [value]="false">Inactivo</mat-button-toggle>
             </mat-button-toggle-group>

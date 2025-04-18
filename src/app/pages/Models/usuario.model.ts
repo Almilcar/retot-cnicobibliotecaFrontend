@@ -1,7 +1,7 @@
 export interface Usuario {
-  IdUsuario: number;
-  Usuario: string;
-  ContraseniaHash: string;  
-  Rol: string;
-  Activo: boolean;
+  idUsuario: number;
+  usuario: string;
+  contraseniaHash: string;  
+  rol: string;
+  activo: boolean;
 }

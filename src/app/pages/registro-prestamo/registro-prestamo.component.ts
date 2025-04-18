@@ -1,12 +1,7 @@
 import { Component } from '@angular/core';
 import { PrestamoRequestDTO } from '../../models/prestamo';
 import { PrestamoService } from '../../services/prestamo.service';
-import { Console } from 'console';
 import Swal from 'sweetalert2';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatSelectModule } from '@angular/material/select';  
-import { MatButtonModule } from '@angular/material/button';  
-import { MatCardModule } from '@angular/material/card';  
 
 @Component({
   selector: 'app-registro-prestamo',
@@ -20,10 +15,36 @@ export class RegistroPrestamoComponent {
     medioEntrega: '',
     libros: []
   };
-
+  prestamos: PrestamoRequestDTO[] = [];
   mensaje = '';
-
+  displayedColumns: string[] = ['idCliente', 'medioEntrega', 'idCopia', 'fechaEntrega'];
   constructor(private servicio: PrestamoService) {}
+
+  ngOnInit(): void {
+    this.listarPrestamosLibro();
+  }
+  
+  formatDate(date: string): string {
+    const formattedDate = new Date(date);
+    return formattedDate.toISOString().split('T')[0];   
+  }
+  
+  listarPrestamosLibro(){
+    this.servicio.obtenerPrestamos().subscribe({
+      next: (data) => {
+        data.forEach((prestamo) => {
+          prestamo.libros.forEach((libro) => {
+            libro.fechaEntrega = this.formatDate(libro.fechaEntrega);
+          });
+        });
+        this.prestamos = data;
+      },
+      error: (err) => {
+        console.error('Error al obtener el préstamo:', err);
+      }
+    });
+  }
+  
 
   agregarLibro() {
     this.prestamo.libros.push({ idCopia: 0, fechaEntrega: '' });
@@ -58,12 +79,4 @@ export class RegistroPrestamoComponent {
       }
     });
   }
-  
-  
-  
-  
-  
-  
-  
-  
 }

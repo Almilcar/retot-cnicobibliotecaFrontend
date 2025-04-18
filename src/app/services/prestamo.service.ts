@@ -15,4 +15,8 @@ export class PrestamoService {
   registrarPrestamo(data: PrestamoRequestDTO): Observable<any> {
     return this.http.post(`${this.baseUrl}/registrar`, data);
   }
+
+  obtenerPrestamos(): Observable<PrestamoRequestDTO[]> {
+    return this.http.get<PrestamoRequestDTO[]>(`${this.baseUrl}/listar`);
+  }
 }

@@ -22,7 +22,7 @@ export class ClientService {
   }
 
   updateClient(cliente: cliente): Observable<void> {
-    return this.http.put<void>(`${this.apiUrl}/${cliente.IdCliente}`, cliente);
+    return this.http.put<void>(`${this.apiUrl}/${cliente.idCliente}`, cliente);
   }
 
   deleteClient(id: number): Observable<void> {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ClientService } from '../../services/ClientService.service';
 import { UbigeoService } from '../../services/ubigeo.service';
 import { ToastrService } from 'ngx-toastr';
@@ -14,18 +14,18 @@ import { cliente } from '../Models/clienteModels';
 })
 export class RegistrClienteComponent implements OnInit {
   client: cliente = {
-    IdCliente: 0,
-    TipoDocumento: '',
-    NombreCompleto: '',
-    Documento: '',
-    Telefono: '',
-    Email: '',
-    Direccion: '',
-    Ubigeo: '',
-    Departamento: '',
-    Provincia: '',
-    Distrito: '',
-    EnListaNegra: false
+    idCliente: 0,
+    tipoDocumento: '',
+    nombreCompleto: '',
+    documento: '',
+    telefono: '',
+    email: '',
+    direccion: '',
+    ubigeo: '',
+    enListaNegra: false,
+    departamento: '',
+    provincia: '',
+    distrito: ''
   };
 
   editingClient = false;
@@ -34,13 +34,13 @@ export class RegistrClienteComponent implements OnInit {
   departamentos: string[] = [];
   provincias: string[] = [];
   distritos: string[] = [];
-  displayedColumns: string[] = ['nombreCompleto', 'documento', 'email', 'telefono'];
-
+  displayedColumns: string[] = ['nombreCompleto', 'documento', 'email', 'telefono', 'acciones'];
 
   constructor(
     private clientService: ClientService,
     private ubigeoService: UbigeoService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -52,6 +52,7 @@ export class RegistrClienteComponent implements OnInit {
     this.clientService.getAllClients().subscribe({
       next: (data: cliente[]) => {
         this.clients = data;
+        console.log("clients: ", data)
       },
       error: () => Swal.fire('Error', 'Error al cargar clientes')
     });
@@ -62,15 +63,15 @@ export class RegistrClienteComponent implements OnInit {
   }
 
   onDepartamentoChange(): void {
-    this.client.Provincia = '';
-    this.client.Distrito = '';
-    this.provincias = this.ubigeoService.getProvincias(this.client.Departamento);
+    this.client.provincia = '';
+    this.client.distrito = '';
+    this.provincias = this.ubigeoService.getProvincias(this.client.departamento);
     this.distritos = [];
   }
 
   onProvinciaChange(): void {
-    this.client.Distrito = '';
-    this.distritos = this.ubigeoService.getDistritos(this.client.Departamento, this.client.Provincia);
+    this.client.distrito = '';
+    this.distritos = this.ubigeoService.getDistritos(this.client.departamento, this.client.provincia);
   }
 
   onSubmit(): void {
@@ -85,13 +86,8 @@ export class RegistrClienteComponent implements OnInit {
       });
     } else {
       this.clientService.createClient(this.client).subscribe({
-        next: (response) => {     
-           Swal.fire({
-                    icon: 'success',
-                    title: 'Éxito',
-                    text: 'Préstamo registrado con éxito.',
-                    confirmButtonColor: '#3085d6'
-                  });
+        next: () => {
+          Swal.fire('Éxito', 'Cliente registrado correctamente', 'success');
           this.resetForm();
           this.loadClients();
         },
@@ -102,25 +98,48 @@ export class RegistrClienteComponent implements OnInit {
     }
   }
  
-
-  editClient(client: any): void {
-    this.client = { ...client };
+  editClient(cliente: any): void {
+    this.client = { 
+      ...cliente,
+      tipoDocumento: cliente.tipoDocumento || '',
+      nombreCompleto: cliente.nombreCompleto || '',
+      documento: cliente.documento || '',
+      telefono: cliente.telefono || '',
+      email: cliente.email || '',
+      direccion: cliente.direccion || '',
+      ubigeo: cliente.ubigeo || '',
+      departamento: cliente.departamento || '',
+      provincia: cliente.provincia || '',
+      distrito: cliente.distrito || '',
+      enListaNegra: cliente.enListaNegra || false
+    };
     this.editingClient = true;
-    
-    this.provincias = this.ubigeoService.getProvincias(this.client.Departamento);
-    this.distritos = this.ubigeoService.getDistritos(this.client.Departamento, this.client.Provincia);
+  
+    this.provincias = this.ubigeoService.getProvincias(this.client.departamento);
+    this.distritos = this.ubigeoService.getDistritos(this.client.departamento, this.client.provincia);
   }
-
+  
   deleteClient(id: number): void {
-    if (confirm('¿Está seguro de eliminar este cliente?')) {
-      this.clientService.deleteClient(id).subscribe({
-        next: () => {
-          this.toastr.success('Cliente eliminado');
-          this.loadClients();
-        },
-        error: () => this.toastr.error('Error al eliminar')
-      });
-    }
+    Swal.fire({
+      title: '¿Está seguro de eliminar este cliente?',
+      text: 'Esta acción no se puede deshacer.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.clientService.deleteClient(id).subscribe({
+          next: () => {
+            this.toastr.success('Cliente eliminado');
+            this.loadClients();
+          },
+          error: () => this.toastr.error('Error al eliminar')
+        });
+      }
+    });
   }
 
   cancelEdit(): void {
@@ -129,19 +148,18 @@ export class RegistrClienteComponent implements OnInit {
 
   resetForm(): void {
     this.client = { 
-
-      TipoDocumento: '',
-      IdCliente: 0, 
-      NombreCompleto: '', 
-      Documento: '', 
-      Telefono: '', 
-      Email: '', 
-      Direccion: '', 
-      Ubigeo: '', 
-      Departamento: '', 
-      Provincia: '',
-      Distrito: '',
-      EnListaNegra: false 
+      tipoDocumento: '',
+      idCliente: 0, 
+      nombreCompleto: '', 
+      documento: '', 
+      telefono: '', 
+      email: '', 
+      direccion: '', 
+      ubigeo: '', 
+      departamento: '', 
+      provincia: '',
+      distrito: '',
+      enListaNegra: false 
     };
     this.editingClient = false;
   }
